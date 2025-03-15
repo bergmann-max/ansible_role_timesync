@@ -1,2 +1,4 @@
 ---
 # roles/template/defaults/main.yml
+
+time_server: pool.ntp.org

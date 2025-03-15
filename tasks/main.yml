@@ -1,7 +1,30 @@
 ---
-# roles/template/tasks/main.yml
+# roles/time/tasks/main.yml
 
-- name: Update repositories cache and install "foo" package
-  ansible.builtin.apt:
-    name: foo
-    update_cache: yes
+- name: Ensure systemd-timesyncd is installed and enabled
+  ansible.builtin.service:
+    name: systemd-timesyncd
+    state: started
+    enabled: yes
+
+- name: Time | Set configuration file for systemd-timesyncd
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/timesyncd.conf
+    regexp: '^NTP='
+    line: "NTP={{ time_server }}"
+    create: true
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  notify: Restart timesyncd
+
+- name: Read current NTP configuration
+  ansible.builtin.slurp:
+    src: /etc/systemd/timesyncd.conf
+  register: timesyncd_conf
+
+- name: Verify systemd-timesyncd configuration
+  ansible.builtin.fail:
+    msg: "NTP server configuration is incorrect!"
+  when: "'NTP={{ time_server }}' not in timesyncd_conf['content'] | b64decode"
+

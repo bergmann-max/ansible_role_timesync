@@ -3,7 +3,7 @@
 
 galaxy_info:
   author: Max Bergmann
-  description: An Ansible role template
+  description: Ensures systemd-timesyncd is running, configures NTP, and verifies setup.
   license: MIT
   min_ansible_version: "2.9"
 dependencies: []

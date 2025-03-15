@@ -1,2 +1,8 @@
 ---
-# roles/template/handlers/main.yml
+# roles/time/handlers/main.yml
+
+- name: Restart timesyncd
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    state: restarted
+    enabled: true
