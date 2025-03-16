@@ -1,5 +1,5 @@
 ---
-# roles/time/handlers/main.yml
+# roles/ansible_role_timesync/handlers/main.yml
 
 - name: Restart timesyncd
   ansible.builtin.systemd:

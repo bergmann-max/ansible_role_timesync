@@ -1,5 +1,5 @@
 ---
-# roles/time/tasks/main.yml
+# roles/ansible_role_timesync/tasks/main.yml
 
 - name: Ensure systemd-timesyncd is installed and enabled
   ansible.builtin.service:
@@ -27,4 +27,3 @@
   ansible.builtin.fail:
     msg: "NTP server configuration is incorrect!"
   when: "'NTP={{ time_server }}' not in timesyncd_conf['content'] | b64decode"
-
