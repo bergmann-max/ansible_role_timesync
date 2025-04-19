@@ -6,6 +6,10 @@ galaxy_info:
   description: Configure system time synchronization via systemd-timesyncd with a custom NTP server.
   license: Unlicense
   min_ansible_version: "2.9"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
   galaxy_tags:
     - ntp
     - timesync
