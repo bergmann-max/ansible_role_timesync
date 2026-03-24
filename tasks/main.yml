@@ -21,17 +21,17 @@
 - name: Read current NTP configuration
   ansible.builtin.slurp:
     src: /etc/systemd/timesyncd.conf
-  register: ansible_role_timesyncd_conf
+  register: ansible_role_timesync_timesyncd_conf
 
 - name: Decode timesyncd configuration content
   ansible.builtin.set_fact:
-    ansible_role_decoded_timesyncd_content: "{{ ansible_role_timesyncd_conf['content'] | b64decode }}"
+    ansible_role_timesync_decoded_timesyncd_content: "{{ ansible_role_timesync_timesyncd_conf['content'] | b64decode }}"
 
 - name: Set expected NTP line
   ansible.builtin.set_fact:
-    ansible_role_expected_ntp_line: "NTP={{ ansible_role_timesync_time_server }}"
+    ansible_role_timesync_expected_ntp_line: "NTP={{ ansible_role_timesync_time_server }}"
 
 - name: Verify systemd-timesyncd configuration
   ansible.builtin.fail:
     msg: "NTP server configuration is incorrect!"
-  when: ansible_role_expected_ntp_line not in ansible_role_decoded_timesyncd_content
+  when: ansible_role_timesync_expected_ntp_line not in ansible_role_timesync_decoded_timesyncd_content
