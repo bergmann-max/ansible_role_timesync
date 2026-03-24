@@ -20,7 +20,7 @@ The following variable can be set (see `defaults/main.yml`):
 
 | Variable     | Default         | Description |
 |--------------|-----------------|-------------|
-| `time_server` | `pool.ntp.org` | The NTP server address used for time synchronization |
+| `ansible_role_timesync_time_server` | `pool.ntp.org` | The NTP server address used for time synchronization |
 
 ## Usage Example
 
