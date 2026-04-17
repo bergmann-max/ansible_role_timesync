@@ -1,4 +1,4 @@
 ---
 # roles/ansible_role_timesync/defaults/main.yml
 
-ansible_role_timesync_time_server: pool.ntp.org
+timesync_time_server: pool.ntp.org

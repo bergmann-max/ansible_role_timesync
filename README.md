@@ -1,4 +1,4 @@
-# Ansible Role: ansible_role_ntp_simple
+# Ansible Role: timesync
 
 ![Ansible](https://img.shields.io/badge/ansible-ready-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Ubuntu-lightgrey)
@@ -6,63 +6,54 @@
 
 ## Description
 
-This Ansible role configures the system's time synchronization service to use a specific NTP server.  
-It is designed to provide a lightweight and portable time sync setup using `systemd-timesyncd`, which is available on most modern Ubuntu systems.
+Configures system time synchronization via `systemd-timesyncd` with NTP server.
 
-### Features:
-- Sets a custom NTP server (default: `pool.ntp.org`)
-- Ensures `systemd-timesyncd` is active and enabled
-- Compatible with minimal and containerized Ubuntu systems
+## Variables
 
-## Role Variables
+| Variable | Default | Description |
+|---|---|---|
+| `timesync_time_server` | `pool.ntp.org` | NTP server address used for time synchronization |
 
-The following variable can be set (see `defaults/main.yml`):
+## Installation
 
-| Variable     | Default         | Description |
-|--------------|-----------------|-------------|
-| `ansible_role_timesync_time_server` | `pool.ntp.org` | The NTP server address used for time synchronization |
+Include via a `requirements.yml` and install with `ansible-galaxy`:
 
-## Usage Example
+```yaml
+# requirements.yml
+roles:
+  - name: timesync
+    src: git+ssh://git@github.com/bergmann-max/ansible_role_timesync.git
+    version: main
+    scm: git
+```
+
+```bash
+ansible-galaxy install -r requirements.yml
+```
+
+## Example Playbook
 
 ```yaml
 - name: Configure NTP time synchronization
   hosts: all
   become: true
+
   roles:
-    - role: ansible_role_ntp_simple
+    - role: timesync
+      vars:
+        timesync_time_server: "pool.ntp.org"
 ```
 
-## Sanity Checks
+## Handlers
 
-This role ensures:
-- `systemd-timesyncd` is properly configured
-- The service is enabled and started
-- The specified NTP server is used for synchronization
-
-## Directory Structure
-
-Follows standard Ansible role layout:
-
-```
-ansible_role_ntp_simple/
-├── defaults/
-│   └── main.yml
-├── tasks/
-│   └── main.yml
-├── handlers/
-│   └── main.yml
-├── meta/
-│   └── main.yml
-└── README.md
-```
-
-✔️ Designed for minimal NTP configuration on Ubuntu-based systems.
+| Handler | Triggered by | Description |
+|---|---|---|
+| `Restart timesyncd` | `lineinfile` config change | Restarts `systemd-timesyncd` via `systemd` module |
 
 ## License
 
 Unlicense
 
-## Author Information
+## Author
 
-Role maintained by Max Bergmann.  
-Feedback, suggestions, and contributions are always welcome! 🚀
+Max Bergmann

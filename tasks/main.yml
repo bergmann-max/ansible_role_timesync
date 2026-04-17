@@ -1,7 +1,12 @@
 ---
-# roles/ansible_role_timesync/tasks/main.yml
+# roles/timesync/tasks/main.yml
 
-- name: Ensure systemd-timesyncd is installed and enabled
+- name: Ensure systemd-timesyncd is installed
+  ansible.builtin.apt:
+    name: systemd-timesyncd
+    state: present
+
+- name: Ensure systemd-timesyncd is started and enabled
   ansible.builtin.service:
     name: systemd-timesyncd
     state: started
@@ -11,27 +16,9 @@
   ansible.builtin.lineinfile:
     path: /etc/systemd/timesyncd.conf
     regexp: '^NTP='
-    line: "NTP={{ ansible_role_timesync_time_server }}"
+    line: "NTP={{ timesync_time_server }}"
     create: true
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
   notify: Restart timesyncd
-
-- name: Read current NTP configuration
-  ansible.builtin.slurp:
-    src: /etc/systemd/timesyncd.conf
-  register: ansible_role_timesync_timesyncd_conf
-
-- name: Decode timesyncd configuration content
-  ansible.builtin.set_fact:
-    ansible_role_timesync_decoded_timesyncd_content: "{{ ansible_role_timesync_timesyncd_conf['content'] | b64decode }}"
-
-- name: Set expected NTP line
-  ansible.builtin.set_fact:
-    ansible_role_timesync_expected_ntp_line: "NTP={{ ansible_role_timesync_time_server }}"
-
-- name: Verify systemd-timesyncd configuration
-  ansible.builtin.fail:
-    msg: "NTP server configuration is incorrect!"
-  when: ansible_role_timesync_expected_ntp_line not in ansible_role_timesync_decoded_timesyncd_content

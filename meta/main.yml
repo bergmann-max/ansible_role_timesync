@@ -1,15 +1,15 @@
 ---
-# roles/ansible_role_dnsmasq_localdns/meta/main.yml
+# roles/timesync/meta/main.yml
 
 galaxy_info:
+  role_name: timesync
+  namespace: max_bergmann
   author: Max Bergmann
-  description: Configure system time synchronization via systemd-timesyncd with a custom NTP server.
+  description: Configure system time synchronization via systemd-timesyncd with a NTP server.
   license: Unlicense
   min_ansible_version: "2.9"
   platforms:
     - name: Ubuntu
-      versions:
-        - all
   galaxy_tags:
     - ntp
     - timesync
